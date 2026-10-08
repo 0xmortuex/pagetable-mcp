@@ -1,0 +1,55 @@
+[project]
+name = "pagetable-mcp"
+version = "0.1.0"
+description = "MCP server that walks a live VM's x86 page tables through QEMU's gdbstub and explains address translation and page faults - 32-bit, PAE, 4- and 5-level."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "0xmortuex" }]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=2.0.0",
+    "pyelftools>=0.31",
+    # PyPI rejects direct git references: switch to "gdbstub-mcp>=0.1.0" once
+    # gdbstub-mcp is published, before publishing pagetable-mcp.
+    "gdbstub-mcp @ git+https://github.com/0xmortuex/gdbstub-mcp",
+]
+keywords = ["mcp", "paging", "page-tables", "x86", "osdev", "qemu", "kernel", "page-fault"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Debuggers",
+    "Topic :: System :: Operating System Kernels",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "anyio"]
+
+[project.urls]
+Homepage = "https://github.com/0xmortuex/pagetable-mcp"
+
+[project.scripts]
+pagetable-mcp = "pagetable_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pagetable_mcp"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
+[[tool.mypy.overrides]]
+# capstone (pulled in via gdbstub-mcp) ships no type stubs or py.typed marker.
+module = ["capstone", "elftools", "elftools.*"]
+ignore_missing_imports = true
