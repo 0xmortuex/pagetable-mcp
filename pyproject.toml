@@ -9,9 +9,7 @@ requires-python = ">=3.10"
 dependencies = [
     "mcp>=2.0.0",
     "pyelftools>=0.31",
-    # PyPI rejects direct git references: switch to "gdbstub-mcp>=0.1.0" once
-    # gdbstub-mcp is published, before publishing pagetable-mcp.
-    "gdbstub-mcp @ git+https://github.com/0xmortuex/gdbstub-mcp",
+    "gdbstub-mcp>=0.1.0",
 ]
 keywords = ["mcp", "paging", "page-tables", "x86", "osdev", "qemu", "kernel", "page-fault"]
 classifiers = [
@@ -39,9 +37,6 @@ pagetable-mcp = "pagetable_mcp.server:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.hatch.metadata]
-allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pagetable_mcp"]
